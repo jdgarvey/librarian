@@ -1,0 +1,12 @@
+type User {
+  id: ID! @unique
+  name: String!
+}
+
+type Book {
+  id: ID! @unique
+  title: String!
+  author: String!
+  excerpt: String
+  uploader: User
+}
