@@ -1,0 +1,21 @@
+mat-toolbar-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.actions {
+  display: flex;
+  align-items: baseline;
+}
+
+.actions button {
+  margin-left: 2rem;
+}
+
+.actions mat-icon, .actions button {
+  width: auto;
+}
+
+.actions mat-icon {
+  font-size: 2rem;
+}

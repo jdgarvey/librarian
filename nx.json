@@ -7,5 +7,12 @@
     "tslint.json": "*",
     "nx.json": "*"
   },
-  "projects": {}
+  "projects": {
+    "librarian": {
+      "tags": []
+    },
+    "librarian-e2e": {
+      "tags": []
+    }
+  }
 }
