@@ -1,25 +1,95 @@
-<div class="mat-elevation-z8">
-  <table mat-table #table [dataSource]="dataSource" matSort aria-label="Elements" >
-    <!-- Id Column -->
-    <ng-container matColumnDef="id">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Id</th>
-      <td mat-cell *matCellDef="let row">{{row.id}}</td>
-    </ng-container>
+<div class="wrapper">
+  <div class="table-wrapper mat-elevation-z8">
+    <table mat-table #table [dataSource]="dataSource" matSort aria-label="Elements" >
 
-    <!-- Name Column -->
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-      <td mat-cell *matCellDef="let row">{{row.name}}</td>
-    </ng-container>
+      <!-- Title Column -->
+      <ng-container matColumnDef="title">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>
+        <td mat-cell *matCellDef="let row">
+          <mat-form-field appearance="outline">
+            <mat-label>Book Title</mat-label>
+            <input #title (blur)="updateBook(row, {title: title.value})" matInput [ngModel]="row.title">
+          </mat-form-field>
+        </td>
+      </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
+      <ng-container matColumnDef="author">
+        <th mat-header-cell *matHeaderCellDef>Author</th>
+        <td mat-cell *matCellDef="let row">
+          <mat-form-field appearance="outline">
+            <mat-label>Book Author</mat-label>
+            <input #author (blur)="updateBook(row, {author: author.value})" matInput [ngModel]="row.author">
+          </mat-form-field>
+        </td>
+      </ng-container>
 
-  <mat-paginator #paginator
-    [length]="dataSource.data.length"
-    [pageIndex]="0"
-    [pageSize]="50"
-    [pageSizeOptions]="[25, 50, 100, 250]">
-  </mat-paginator>
+      <ng-container matColumnDef="excerpt">
+        <th mat-header-cell *matHeaderCellDef>Excerpt</th>
+        <td mat-cell *matCellDef="let row">
+          <mat-form-field appearance="outline">
+            <mat-label>Excerpt from the Book</mat-label>
+            <textarea #excerpt (blur)="updateBook(row, {excerpt: excerpt.value})" matInput [ngModel]="row.excerpt"></textarea>
+          </mat-form-field>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="uploader">
+        <th mat-header-cell *matHeaderCellDef>Uploader</th>
+        <td mat-cell *matCellDef="let row">
+          <mat-form-field>
+            <mat-select #uploader (selectionChange)="updateBook(row, {uploaderId: uploader.value})" name="uploader" [ngModel]="row.uploader?.id" placeholder="Uploader">
+              <mat-option *ngFor="let user of users" [value]="user.id">
+                {{user.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let row">
+          <button (click)="deleteBook(row.id)" mat-mini-fab color="warn"><mat-icon>delete</mat-icon></button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <mat-paginator #paginator
+                   [length]="dataSource.data.length"
+                   [pageIndex]="0"
+                   [pageSize]="50"
+                   [pageSizeOptions]="[25, 50, 100, 250]">
+    </mat-paginator>
+  </div>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Create a New Book</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form (ngSubmit)="uploadBook(newBook)">
+        <mat-form-field appearance="outline">
+          <mat-label>Book Title</mat-label>
+          <input name="title" matInput [(ngModel)]="newBook.title">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Book Author</mat-label>
+          <input name="author" matInput [(ngModel)]="newBook.author">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Book Excerpt</mat-label>
+          <input name="excerpt" matInput [(ngModel)]="newBook.excerpt">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-select name="uploader" [(ngModel)]="newBook.uploaderId" placeholder="Uploader">
+            <mat-option *ngFor="let user of users" [value]="user.id">
+              {{user.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button type="submit" mat-raised-button color="accent">Just Send It</button>
+      </form>
+    </mat-card-content>
+  </mat-card>
 </div>

@@ -3,12 +3,11 @@
 
 type Query {
     books(searchString: String): [Book!]!
-    user(id: ID!): User
+    users: [User]!
 }
 
 type Mutation {
-    signup(name: String!): User!
     deleteBook(id: ID!): Book
     updateBook(id: ID!, title: String, author: String, excerpt: String, uploaderId: ID): Book
-    uploadBook(title: String!, author: String!, excerpt: String, uploaderId: ID!): Book
+    uploadBook(title: String!, author: String!, excerpt: String, uploaderId: ID): Book
 }

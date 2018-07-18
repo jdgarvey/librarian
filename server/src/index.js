@@ -6,10 +6,11 @@ const resolvers = {
     books: (root, args, context, info) => {
       return context.prisma.query.books({where: {OR: [{title_contains: args.searchString}]}}, info)
     },
-    user: (root, args, context, info) => context.prisma.query.user({where: {id: args.id}}, info)
+    users: (root, args, context, info) => {
+      return context.prisma.query.users({}, info)
+    }
   },
   Mutation: {
-    signup: (root, args, context, info) => context.prisma.mutation.createUser({data: {name: args.name}}, info),
     deleteBook: (root, args, context, info) => context.prisma.mutation.deleteBook({where: {id: args.id}}, info),
     updateBook: (root, args, context, info) => {
       const {id, title, author, excerpt, uploaderId} = args, data = {};
@@ -34,18 +35,17 @@ const resolvers = {
     },
     uploadBook: (root, args, context, info) => {
       const {title, author, excerpt, uploaderId} = args;
-      return context.prisma.mutation.createBook({
-        data: {
-          title,
-          author,
-          excerpt,
-          uploader: {
-            connect: {
-              id: uploaderId
-            }
-          }
-        }
-      }, info)
+
+      const data = {title, author};
+
+      if (excerpt !== undefined) {
+        data.excerpt = excerpt;
+      }
+
+      if (uploaderId !== undefined) {
+        data.uploader = {connect: {id: uploaderId}};
+      }
+      return context.prisma.mutation.createBook({data}, info)
     }
   }
 };
@@ -57,7 +57,7 @@ const server = new GraphQLServer({
     ...req,
     prisma: new Prisma({
       typeDefs: 'src/generated/prisma.graphql',
-      endpoint: 'https://us1.prisma.sh/jondgarvey/hello-prisma/dev'
+      endpoint: 'https://us1.prisma.sh/jondgarvey/librarian/dev'
     })
   })
 });

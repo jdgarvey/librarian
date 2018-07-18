@@ -1,2 +1,2 @@
-endpoint: https://us1.prisma.sh/jondgarvey/hello-prisma/dev
+endpoint: https://us1.prisma.sh/jondgarvey/librarian/dev
 datamodel: datamodel.graphql
